@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Restaurant
 {
-    class OrderOption : Option
+    class Option
     {
-        private OptionList submenu;
-        public OrderOption()
+        public virtual string Name { get; set; }
+        public Option() { }
+        public Option(string name)
         {
-            Name = "Zamówienie";
+            Name = name;
         }
-
-        public override void Execute()
+        public virtual void Execute()
         {
-            
+
         }
     }
 }

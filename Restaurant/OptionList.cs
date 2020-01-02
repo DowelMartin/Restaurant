@@ -6,72 +6,67 @@ using System.Threading.Tasks;
 
 namespace Restaurant
 {
-    class Menu
+    class OptionList
     {
-        private List<IOption> options;
-        private String title;
-        public Menu(String title):this()
+        private List<Option> options;
+        private string title;
+        public OptionList(string title):this()
         {
             this.title = title;
         }
-        public Menu()
+        public OptionList()
         {
-            options = new List<IOption>();
+            options = new List<Option>();
         }
-        public void add(IOption option)
+        public void Add(Option option)
         {
             options.Add(option);
         }
-        public void start()
+        public void Start()
         {
-            add(new ExitOption());
-            int select = 0;
+            int backlight = 0;
             ConsoleKeyInfo key;
             
             do
             {
                 Console.Clear();
-                writeMenu(select);
+                WriteOptions(backlight);
                 key = Console.ReadKey(true);
                 switch (key.Key)
                 {
                     case ConsoleKey.DownArrow:
-                        select = select == options.Count - 1 ? select : select + 1;
+                        backlight = backlight == options.Count - 1 ? backlight : backlight + 1;
                         break;
                     case ConsoleKey.UpArrow:
-                        select = select == 0 ? select : select - 1;
+                        backlight = backlight == 0 ? backlight : backlight - 1;
                         break;
                     case ConsoleKey.Enter:
-                        options[select].execute();
-                        if(select==options.Count-1)return;
+                        options[backlight].Execute();
+                        if(backlight==options.Count-1)return;
                         break;
                 }
             } while (true);
         }
-        private void writeMenu(int selected)
+        private void WriteOptions(int backlight)
         {
             if(title!="")
             Console.WriteLine("----------------------------{0}----------------------------", title);
             for(int i=0;i<options.Count;i++)
             {
-                String output = (i+1) + ". " + options[i].Name;
-                if (i == selected)
-                    consoleSelect(output);
+                string output = (i+1) + ". " + options[i].Name;
+                if (i == backlight)
+                    ConsoleSelect(output);
                 else
                     Console.WriteLine(output);
             }
         }
-        private void consoleSelect(String s)
+        public static void ConsoleSelect(string s,ConsoleColor fgr=ConsoleColor.Black,ConsoleColor bgr=ConsoleColor.White)
         {
-            Console.BackgroundColor = ConsoleColor.White;
+            Console.BackgroundColor = bgr;
+            Console.ForegroundColor = fgr;
             Console.WriteLine(s);
             Console.BackgroundColor = ConsoleColor.Black;
-        }
-        private class ExitOption : IOption
-        {
-            public string Name { get; set; }
-            public void execute(){}
-            public ExitOption() { Name = "Exit"; }
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }
