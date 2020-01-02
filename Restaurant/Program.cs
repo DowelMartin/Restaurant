@@ -12,7 +12,7 @@ namespace Restaurant
         {
             OptionList menu = new OptionList("Menu");
             menu.Add(new LoginOption("Logowanie"));
-            menu.Add(new RejestrationOption());
+            menu.Add(new RejestrationOption("Rejestracja"));
             menu.Add(new Option("Wyjście"));
             menu.Start();
         }

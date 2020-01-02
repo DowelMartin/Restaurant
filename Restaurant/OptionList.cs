@@ -50,10 +50,10 @@ namespace Restaurant
         private void WriteOptions(int backlight)
         {
             if(title!="")
-            Console.WriteLine("----------------------------{0}----------------------------", title);
+            Console.WriteLine("{0,20}", title);
             for(int i=0;i<options.Count;i++)
             {
-                string output = (i+1) + ". " + options[i].Name;
+                string output =  options[i].Name;
                 if (i == backlight)
                     ConsoleSelect(output);
                 else

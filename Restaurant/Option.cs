@@ -10,10 +10,7 @@ namespace Restaurant
     {
         public virtual string Name { get; set; }
         public Option() { }
-        public Option(string name)
-        {
-            Name = name;
-        }
+        public Option(string name) => this.Name = name;
         public virtual void Execute()
         {
 

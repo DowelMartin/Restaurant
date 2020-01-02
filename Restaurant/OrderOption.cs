@@ -9,10 +9,8 @@ namespace Restaurant
     class OrderOption : Option
     {
         private OptionList submenu;
-        public OrderOption()
-        {
-            Name = "Zamówienie";
-        }
+        public OrderOption() { }
+        public OrderOption(string name) => this.Name = name;
 
         public override void Execute()
         {
