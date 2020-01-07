@@ -11,9 +11,9 @@ namespace Restaurant
         static void Main(string[] args)
         {
             OptionList menu = new OptionList("Menu");
-            menu.Add(new LoginOption("Logowanie"));
+            menu.Add(new Login("Logowanie"));
             menu.Add(new RejestrationOption("Rejestracja"));
-            menu.Add(new Option("Wyjście"));
+            menu.Add(new Exit("Wyjście"));
             menu.Start();
         }
     }

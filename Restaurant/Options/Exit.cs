@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace Restaurant
 {
-    class OrderOption : Option
+    class Exit:Option
     {
-        private OptionList submenu;
-        public OrderOption() { }
-        public OrderOption(string name) => this.Name = name;
-
+        
+        public Exit() { }
+        public Exit(string name) => this.Name = name;
         public override void Execute()
         {
-            
+
         }
     }
 }

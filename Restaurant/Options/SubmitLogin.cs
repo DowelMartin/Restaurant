@@ -22,8 +22,7 @@ namespace Restaurant
 
         public override void Execute()
         {
-            Console.WriteLine("Brak w bazie");
-            Task.Delay(1000);
+            //sprawdzenie danych 
         }
     }
 }

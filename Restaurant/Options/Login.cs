@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Restaurant
 {
-    internal class LoginOption : Option
+    internal class Login : Option
     {
-        public LoginOption() { }
-        public LoginOption(string name) => this.Name = name;
+        public Login() { }
+        public Login(string name) => this.Name = name;
         public override void Execute()
         {
             var loginForm = new OptionList("Logowanie");
-            var mail = new FormFieldOption("E-mail");
-            var pass = new FormFieldOption("Hasło",true);
+            var mail = new FormField("E-mail");
+            var pass = new FormField("Hasło",true);
             loginForm.Add(mail);
             loginForm.Add(pass);
             loginForm.Add(new SubmitLoginOption("Zaloguj", mail.Value, pass.Value));
-            loginForm.Add(new Option("Cofnij"));
+            loginForm.Add(new Exit("Cofnij"));
             loginForm.Start();
         }
     }

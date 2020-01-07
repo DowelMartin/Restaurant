@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Restaurant
 {
-    class FormFieldOption : Option
+    class FormField : Option
     {
         private string name;
+        private string value;
         private bool hidden = false;
         public override string Name
         {
@@ -19,10 +20,18 @@ namespace Restaurant
             }
             set { name = value; }
         }
-        public string Value { set; get; }
-        public FormFieldOption() { }
-        public FormFieldOption(string name) => this.name = name;
-        public FormFieldOption(string name, bool hidden)
+        public string Value {
+            get
+            {
+                if (value == null) return "" ;
+                return value;
+            }
+            set { this.value = value;
+            }
+        }
+        public FormField() { }
+        public FormField(string name) => this.name = name;
+        public FormField(string name, bool hidden)
         {
             this.name = name;
             this.hidden = hidden;
@@ -32,7 +41,7 @@ namespace Restaurant
         {
             Console.Clear();
             Console.WriteLine(name + ":");
-            Value = Console.ReadLine();
+            Value = Console.ReadLine().Trim();
         }
         public string Hide(string str)
         {

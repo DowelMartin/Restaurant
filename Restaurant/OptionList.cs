@@ -35,14 +35,14 @@ namespace Restaurant
                 switch (key.Key)
                 {
                     case ConsoleKey.DownArrow:
-                        backlight = backlight == options.Count - 1 ? backlight : backlight + 1;
+                        backlight = backlight == options.Count - 1 ? 0 : backlight + 1;
                         break;
                     case ConsoleKey.UpArrow:
-                        backlight = backlight == 0 ? backlight : backlight - 1;
+                        backlight = backlight == 0 ? options.Count-1 : backlight - 1;
                         break;
                     case ConsoleKey.Enter:
                         options[backlight].Execute();
-                        if(backlight==options.Count-1)return;
+                        if(options[backlight].GetType() == typeof(Exit))return;
                         break;
                 }
             } while (true);
