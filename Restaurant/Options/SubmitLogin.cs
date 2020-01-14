@@ -22,6 +22,8 @@ namespace Restaurant
 
         public override void Execute()
         {
+            
+            Menu menu = new Menu();
             //sprawdzenie danych 
         }
     }
