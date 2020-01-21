@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Restaurant
 {
-    class Option
+    public class Option
     {
         public virtual string Name { get; set; }
         public Option() { }

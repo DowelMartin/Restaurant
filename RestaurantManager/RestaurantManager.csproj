@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{81849A2B-F284-4A12-BE5F-03486567A306}</ProjectGuid>
+    <ProjectGuid>{24B52F24-596B-4DBD-9148-9A6BC16F3BDA}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Restaurant</RootNamespace>
-    <AssemblyName>Restaurant</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>RestaurantManager</RootNamespace>
+    <AssemblyName>RestaurantManager</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,7 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,24 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pick.cs" />
-    <Compile Include="CsvLibrary.cs" />
-    <Compile Include="Menu.cs" />
-    <Compile Include="Options\CheckOrdersPage.cs" />
-    <Compile Include="Options\Exit.cs" />
-    <Compile Include="Options\FormField.cs" />
-    <Compile Include="Options\Option.cs" />
-    <Compile Include="Options\LoginPage.cs" />
-    <Compile Include="OptionList.cs" />
-    <Compile Include="Options\PlaceOrderPage.cs" />
-    <Compile Include="Options\SubmitRejestration.cs" />
+    <Compile Include="DishesPage.cs" />
+    <Compile Include="OrdersPage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Options\RejestrationPage.cs" />
-    <Compile Include="Options\SubmitLogin.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Restaurant\Restaurant.csproj">
+      <Project>{81849a2b-f284-4a12-be5f-03486567a306}</Project>
+      <Name>Restaurant</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

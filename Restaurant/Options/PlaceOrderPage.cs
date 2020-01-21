@@ -56,7 +56,7 @@ namespace Restaurant
             Console.WriteLine(tableInfo);
             Console.WriteLine(dishesInfo);
             Console.WriteLine("Zamawiam! [T]-Tak/[A]-Anuluj");
-            var key = ForceProperKey(new List<ConsoleKey> { ConsoleKey.T, ConsoleKey.A });
+            var key = Pick.ForceProperKey(new List<ConsoleKey> { ConsoleKey.T, ConsoleKey.A });
             if (key == ConsoleKey.T)
             {
                 //ZAMÓW
@@ -78,22 +78,14 @@ namespace Restaurant
         private Choice isGood()
         {
             Console.WriteLine("[T]-Tak/[N]-Nie/[A]-Anuluj");
-            var key = ForceProperKey(new List<ConsoleKey> { ConsoleKey.N , ConsoleKey.T , ConsoleKey.A});
+            var key = Pick.ForceProperKey(new List<ConsoleKey> { ConsoleKey.N , ConsoleKey.T , ConsoleKey.A});
             if (key == ConsoleKey.N)
                 return Choice.NO;
             else if (key == ConsoleKey.T)
                 return Choice.YES;
             return Choice.CANCEL;
         }
-        private ConsoleKey ForceProperKey(List<ConsoleKey> list)
-        {
-            ConsoleKey key;
-            do
-            {
-                key = Console.ReadKey(true).Key;
-            }while(list.IndexOf(key)==-1);
-            return key;
-        }
+
         private DateTime DatePick()
         {
             DateTime today = DateTime.Now;
