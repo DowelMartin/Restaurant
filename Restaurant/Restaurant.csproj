@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pick.cs" />
     <Compile Include="CsvLibrary.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Options\CheckOrdersPage.cs" />

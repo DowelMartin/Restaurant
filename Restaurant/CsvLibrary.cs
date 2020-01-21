@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Restaurant
 {
-    class CsvLibrary
+    public class CsvLibrary
     {
         public static List<List<string>> Import(string path)  
         {
@@ -23,9 +23,9 @@ namespace Restaurant
             }
             return result;
         }
-        public static void Export(List<List<string>> data)
+        public static void Export(List<List<string>> data,string path)
         {
-            using (var output = new StreamWriter("Zamowienia.csv", false))
+            using (var output = new StreamWriter(path, false))
             {
                 string line;
                 foreach (var items in data)
