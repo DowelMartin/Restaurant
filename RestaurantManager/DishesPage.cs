@@ -36,7 +36,7 @@ namespace RestaurantManager
                 {
                     export.Add(new List<string> { p.Nazwa, string.Format("{0}", p.Cena) });
                 }
-                CsvLibrary.Export(export, "Restauracja_Dania.csv");
+                CsvLibrary.Export(export, "..\\..\\Restauracja_Dania.csv");
             }
 
             //---------------------------Import------------------------

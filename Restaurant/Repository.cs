@@ -180,6 +180,28 @@ namespace Restaurant
                 });
             }
             return result;
+        }  
+        public List<RezerwacjaDto> GetRezerwacjaDtos()
+        {
+            var result = new List<RezerwacjaDto>();
+            foreach (var rez in db.Rezerwacje_Potrawy)
+            {
+                var potrawa = new Potrawa()
+                {
+                    Cena = rez.Potrawy.Cena,
+                    Id_potrawy = rez.Potrawy.Id_potrawy,
+                    Nazwa = rez.Potrawy.Nazwa
+                };
+                result.Add(new RezerwacjaDto()
+                {
+                    Nazwisko = rez.Rezerwacje.Klienci.Nazwisko,
+                    Id_rezerwacji = rez.id_zamowienia,
+                    NumerStolika = rez.Rezerwacje.Numer_stolika,
+                    Potrawa = potrawa,
+                    RezerwacjaOd=rez.Rezerwacje.Rezerwacja_od
+                });
+            }
+            return result;
         }
         public void CancelReservation(int id)
         {
