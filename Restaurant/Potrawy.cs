@@ -17,7 +17,7 @@ namespace Restaurant
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Potrawy()
         {
-            this.Rezerwacje = new HashSet<Rezerwacje>();
+            this.Rezerwacje_Potrawy = new HashSet<Rezerwacje_Potrawy>();
         }
     
         public int Id_potrawy { get; set; }
@@ -25,6 +25,6 @@ namespace Restaurant
         public double Cena { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Rezerwacje> Rezerwacje { get; set; }
+        public virtual ICollection<Rezerwacje_Potrawy> Rezerwacje_Potrawy { get; set; }
     }
 }

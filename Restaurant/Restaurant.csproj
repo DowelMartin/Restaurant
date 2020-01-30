@@ -117,6 +117,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="RezerwacjaDto.cs" />
+    <Compile Include="Rezerwacje_Potrawy.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Stoliki.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

@@ -57,7 +57,7 @@ namespace Restaurant
                 dishes = DishesPick();
                 zamowienie = repo.GetPotrawy()[dishes - 1];
                 dishesInfo = "Zamówiono " + zamowienie.Nazwa + " " + zamowienie.Cena + "zł";
-                Console.WriteLine(dishesInfo+"\nZatwierdzić wybraną potrawę?");
+                Console.WriteLine(dishesInfo + "\nZatwierdzić wybraną potrawę?");
                 choice = isGood();
                 if (choice == Choice.CANCEL) return;
             } while (choice == Choice.NO);
@@ -71,11 +71,16 @@ namespace Restaurant
             var key = Pick.ForceProperKey(new List<ConsoleKey> { ConsoleKey.T, ConsoleKey.A });
             if (key == ConsoleKey.T)
             {
-                //ZAMÓW
-                //
-                //
-                Console.Clear();
-                Console.WriteLine("Sukces! Zamówienie złożone!");
+                if (repo.PlaceOrder(userID, reservation, tableNr, zamowienie))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Sukces! Zamówienie złożone!");
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Błąd przy składaniu zamówienia");
+                }
                 Thread.Sleep(2000);
                 return;
 
@@ -197,7 +202,7 @@ namespace Restaurant
                     pick = int.Parse(Console.ReadLine());
                 }
                 catch (Exception) { }
-            } while (!(pick >0 &&pick <= dishes.Count));
+            } while (!(pick > 0 && pick <= dishes.Count));
             return pick;
         }
     }

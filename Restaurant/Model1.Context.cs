@@ -29,6 +29,7 @@ namespace Restaurant
         public virtual DbSet<Klienci> Klienci { get; set; }
         public virtual DbSet<Potrawy> Potrawy { get; set; }
         public virtual DbSet<Rezerwacje> Rezerwacje { get; set; }
+        public virtual DbSet<Rezerwacje_Potrawy> Rezerwacje_Potrawy { get; set; }
         public virtual DbSet<Stoliki> Stoliki { get; set; }
     }
 }

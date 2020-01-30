@@ -39,15 +39,13 @@
           <Property Name="Rezerwacja_od" Type="datetime" Nullable="false" />
           <Property Name="Rezerwacja_do" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Rezerwacje_Potrawy">
           <Key>
-            <PropertyRef Name="Id_zamowienia" />
-            <PropertyRef Name="Id_potrawy" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="Id_zamowienia" Type="int" Nullable="false" />
-          <Property Name="Id_potrawy" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_zamowienia" Type="int" Nullable="false" />
+          <Property Name="id_potrawy" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Stoliki">
           <Key>
@@ -100,7 +98,7 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
               <PropertyRef Name="Id_potrawy" />
             </Principal>
             <Dependent Role="Rezerwacje_Potrawy">
-              <PropertyRef Name="Id_potrawy" />
+              <PropertyRef Name="id_potrawy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -112,7 +110,7 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
               <PropertyRef Name="Id_rezerwacji" />
             </Principal>
             <Dependent Role="Rezerwacje_Potrawy">
-              <PropertyRef Name="Id_zamowienia" />
+              <PropertyRef Name="id_zamowienia" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -133,13 +131,8 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
           <EntitySet Name="Klienci" EntityType="Self.Klienci" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Potrawy" EntityType="Self.Potrawy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rezerwacje" EntityType="Self.Rezerwacje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rezerwacje_Potrawy" EntityType="Self.Rezerwacje_Potrawy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stoliki" EntityType="Self.Stoliki" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Rezerwacje_Potrawy" EntityType="Self.Rezerwacje_Potrawy" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Rezerwacje_Potrawy].[Id_zamowienia] AS [Id_zamowienia], 
-    [Rezerwacje_Potrawy].[Id_potrawy] AS [Id_potrawy]
-    FROM [dbo].[Rezerwacje_Potrawy] AS [Rezerwacje_Potrawy]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_Klienci_Credentials" Association="Self.FK_Klienci_Credentials">
             <End Role="Credentials" EntitySet="Credentials" />
             <End Role="Klienci" EntitySet="Klienci" />
@@ -169,34 +162,66 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RestauracjaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="RestauracjaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Credentials" EntityType="RestauracjaModel.Credentials" />
+          <EntitySet Name="Klienci" EntityType="RestauracjaModel.Klienci" />
+          <EntitySet Name="Potrawy" EntityType="RestauracjaModel.Potrawy" />
+          <EntitySet Name="Rezerwacje" EntityType="RestauracjaModel.Rezerwacje" />
+          <EntitySet Name="Rezerwacje_Potrawy" EntityType="RestauracjaModel.Rezerwacje_Potrawy" />
+          <EntitySet Name="Stoliki" EntityType="RestauracjaModel.Stoliki" />
+          <AssociationSet Name="FK_Klienci_Credentials" Association="RestauracjaModel.FK_Klienci_Credentials">
+            <End Role="Credentials" EntitySet="Credentials" />
+            <End Role="Klienci" EntitySet="Klienci" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Klienci" Association="RestauracjaModel.FK_Rezerwacje_Klienci">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Klienci1" Association="RestauracjaModel.FK_Rezerwacje_Klienci1">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Potrawy_Potrawy" Association="RestauracjaModel.FK_Rezerwacje_Potrawy_Potrawy">
+            <End Role="Potrawy" EntitySet="Potrawy" />
+            <End Role="Rezerwacje_Potrawy" EntitySet="Rezerwacje_Potrawy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Potrawy_Rezerwacje" Association="RestauracjaModel.FK_Rezerwacje_Potrawy_Rezerwacje">
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+            <End Role="Rezerwacje_Potrawy" EntitySet="Rezerwacje_Potrawy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Stoliki" Association="RestauracjaModel.FK_Rezerwacje_Stoliki">
+            <End Role="Stoliki" EntitySet="Stoliki" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Credentials">
           <Key>
             <PropertyRef Name="Email" />
           </Key>
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Klienci" Relationship="Self.FK_Klienci_Credentials" FromRole="Credentials" ToRole="Klienci" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Klienci" Relationship="RestauracjaModel.FK_Klienci_Credentials" FromRole="Credentials" ToRole="Klienci" />
         </EntityType>
         <EntityType Name="Klienci">
           <Key>
             <PropertyRef Name="Id_klienta" />
           </Key>
           <Property Name="Id_klienta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Imie" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Nazwisko" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Credentials" Relationship="Self.FK_Klienci_Credentials" FromRole="Klienci" ToRole="Credentials" />
-          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK_Rezerwacje_Klienci" FromRole="Klienci" ToRole="Rezerwacje" />
-          <NavigationProperty Name="Rezerwacje1" Relationship="Self.FK_Rezerwacje_Klienci1" FromRole="Klienci" ToRole="Rezerwacje" />
+          <Property Name="Imie" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Nazwisko" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Credentials" Relationship="RestauracjaModel.FK_Klienci_Credentials" FromRole="Klienci" ToRole="Credentials" />
+          <NavigationProperty Name="Rezerwacje" Relationship="RestauracjaModel.FK_Rezerwacje_Klienci" FromRole="Klienci" ToRole="Rezerwacje" />
+          <NavigationProperty Name="Rezerwacje1" Relationship="RestauracjaModel.FK_Rezerwacje_Klienci1" FromRole="Klienci" ToRole="Rezerwacje" />
         </EntityType>
         <EntityType Name="Potrawy">
           <Key>
             <PropertyRef Name="Id_potrawy" />
           </Key>
           <Property Name="Id_potrawy" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nazwa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nazwa" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Cena" Type="Double" Nullable="false" />
-          <NavigationProperty Name="Rezerwacje" Relationship="Self.Rezerwacje_Potrawy" FromRole="Potrawy" ToRole="Rezerwacje" />
+          <NavigationProperty Name="Rezerwacje_Potrawy" Relationship="RestauracjaModel.FK_Rezerwacje_Potrawy_Potrawy" FromRole="Potrawy" ToRole="Rezerwacje_Potrawy" />
         </EntityType>
         <EntityType Name="Rezerwacje">
           <Key>
@@ -207,10 +232,20 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
           <Property Name="Numer_stolika" Type="Int32" Nullable="false" />
           <Property Name="Rezerwacja_od" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Rezerwacja_do" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Klienci" Relationship="Self.FK_Rezerwacje_Klienci" FromRole="Rezerwacje" ToRole="Klienci" />
-          <NavigationProperty Name="Klienci1" Relationship="Self.FK_Rezerwacje_Klienci1" FromRole="Rezerwacje" ToRole="Klienci" />
-          <NavigationProperty Name="Stoliki" Relationship="Self.FK_Rezerwacje_Stoliki" FromRole="Rezerwacje" ToRole="Stoliki" />
-          <NavigationProperty Name="Potrawy" Relationship="Self.Rezerwacje_Potrawy" FromRole="Rezerwacje" ToRole="Potrawy" />
+          <NavigationProperty Name="Klienci" Relationship="RestauracjaModel.FK_Rezerwacje_Klienci" FromRole="Rezerwacje" ToRole="Klienci" />
+          <NavigationProperty Name="Klienci1" Relationship="RestauracjaModel.FK_Rezerwacje_Klienci1" FromRole="Rezerwacje" ToRole="Klienci" />
+          <NavigationProperty Name="Rezerwacje_Potrawy" Relationship="RestauracjaModel.FK_Rezerwacje_Potrawy_Rezerwacje" FromRole="Rezerwacje" ToRole="Rezerwacje_Potrawy" />
+          <NavigationProperty Name="Stoliki" Relationship="RestauracjaModel.FK_Rezerwacje_Stoliki" FromRole="Rezerwacje" ToRole="Stoliki" />
+        </EntityType>
+        <EntityType Name="Rezerwacje_Potrawy">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_zamowienia" Type="Int32" Nullable="false" />
+          <Property Name="id_potrawy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Potrawy" Relationship="RestauracjaModel.FK_Rezerwacje_Potrawy_Potrawy" FromRole="Rezerwacje_Potrawy" ToRole="Potrawy" />
+          <NavigationProperty Name="Rezerwacje" Relationship="RestauracjaModel.FK_Rezerwacje_Potrawy_Rezerwacje" FromRole="Rezerwacje_Potrawy" ToRole="Rezerwacje" />
         </EntityType>
         <EntityType Name="Stoliki">
           <Key>
@@ -218,11 +253,11 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
           </Key>
           <Property Name="Nr_stolika" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Ilosc_miejsc" Type="Int32" />
-          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK_Rezerwacje_Stoliki" FromRole="Stoliki" ToRole="Rezerwacje" />
+          <NavigationProperty Name="Rezerwacje" Relationship="RestauracjaModel.FK_Rezerwacje_Stoliki" FromRole="Stoliki" ToRole="Rezerwacje" />
         </EntityType>
         <Association Name="FK_Klienci_Credentials">
-          <End Role="Credentials" Type="Self.Credentials" Multiplicity="1" />
-          <End Role="Klienci" Type="Self.Klienci" Multiplicity="*" />
+          <End Type="RestauracjaModel.Credentials" Role="Credentials" Multiplicity="1" />
+          <End Type="RestauracjaModel.Klienci" Role="Klienci" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Credentials">
               <PropertyRef Name="Email" />
@@ -233,8 +268,8 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rezerwacje_Klienci">
-          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
-          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <End Type="RestauracjaModel.Klienci" Role="Klienci" Multiplicity="1" />
+          <End Type="RestauracjaModel.Rezerwacje" Role="Rezerwacje" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Klienci">
               <PropertyRef Name="Id_klienta" />
@@ -245,8 +280,8 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rezerwacje_Klienci1">
-          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
-          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <End Type="RestauracjaModel.Klienci" Role="Klienci" Multiplicity="1" />
+          <End Type="RestauracjaModel.Rezerwacje" Role="Rezerwacje" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Klienci">
               <PropertyRef Name="Id_klienta" />
@@ -256,9 +291,33 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Rezerwacje_Potrawy_Potrawy">
+          <End Type="RestauracjaModel.Potrawy" Role="Potrawy" Multiplicity="1" />
+          <End Type="RestauracjaModel.Rezerwacje_Potrawy" Role="Rezerwacje_Potrawy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Potrawy">
+              <PropertyRef Name="Id_potrawy" />
+            </Principal>
+            <Dependent Role="Rezerwacje_Potrawy">
+              <PropertyRef Name="id_potrawy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Potrawy_Rezerwacje">
+          <End Type="RestauracjaModel.Rezerwacje" Role="Rezerwacje" Multiplicity="1" />
+          <End Type="RestauracjaModel.Rezerwacje_Potrawy" Role="Rezerwacje_Potrawy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rezerwacje">
+              <PropertyRef Name="Id_rezerwacji" />
+            </Principal>
+            <Dependent Role="Rezerwacje_Potrawy">
+              <PropertyRef Name="id_zamowienia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Rezerwacje_Stoliki">
-          <End Role="Stoliki" Type="Self.Stoliki" Multiplicity="1" />
-          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <End Type="RestauracjaModel.Stoliki" Role="Stoliki" Multiplicity="1" />
+          <End Type="RestauracjaModel.Rezerwacje" Role="Rezerwacje" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Stoliki">
               <PropertyRef Name="Nr_stolika" />
@@ -268,37 +327,6 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Rezerwacje_Potrawy">
-          <End Role="Potrawy" Type="Self.Potrawy" Multiplicity="*" />
-          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
-        </Association>
-        <EntityContainer Name="RestauracjaEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Credentials" EntityType="Self.Credentials" />
-          <EntitySet Name="Klienci" EntityType="Self.Klienci" />
-          <EntitySet Name="Potrawy" EntityType="Self.Potrawy" />
-          <EntitySet Name="Rezerwacje" EntityType="Self.Rezerwacje" />
-          <EntitySet Name="Stoliki" EntityType="Self.Stoliki" />
-          <AssociationSet Name="FK_Klienci_Credentials" Association="Self.FK_Klienci_Credentials">
-            <End Role="Credentials" EntitySet="Credentials" />
-            <End Role="Klienci" EntitySet="Klienci" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rezerwacje_Klienci" Association="Self.FK_Rezerwacje_Klienci">
-            <End Role="Klienci" EntitySet="Klienci" />
-            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rezerwacje_Klienci1" Association="Self.FK_Rezerwacje_Klienci1">
-            <End Role="Klienci" EntitySet="Klienci" />
-            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rezerwacje_Stoliki" Association="Self.FK_Rezerwacje_Stoliki">
-            <End Role="Stoliki" EntitySet="Stoliki" />
-            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
-          </AssociationSet>
-          <AssociationSet Name="Rezerwacje_Potrawy" Association="Self.Rezerwacje_Potrawy">
-            <End Role="Potrawy" EntitySet="Potrawy" />
-            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -308,57 +336,58 @@ warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have 
           <EntitySetMapping Name="Credentials">
             <EntityTypeMapping TypeName="RestauracjaModel.Credentials">
               <MappingFragment StoreEntitySet="Credentials">
-                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Klienci">
             <EntityTypeMapping TypeName="RestauracjaModel.Klienci">
               <MappingFragment StoreEntitySet="Klienci">
-                <ScalarProperty Name="Id_klienta" ColumnName="Id_klienta" />
-                <ScalarProperty Name="Imie" ColumnName="Imie" />
-                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
+                <ScalarProperty Name="Id_klienta" ColumnName="Id_klienta" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Potrawy">
             <EntityTypeMapping TypeName="RestauracjaModel.Potrawy">
               <MappingFragment StoreEntitySet="Potrawy">
-                <ScalarProperty Name="Id_potrawy" ColumnName="Id_potrawy" />
-                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
                 <ScalarProperty Name="Cena" ColumnName="Cena" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="Id_potrawy" ColumnName="Id_potrawy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Rezerwacje">
             <EntityTypeMapping TypeName="RestauracjaModel.Rezerwacje">
               <MappingFragment StoreEntitySet="Rezerwacje">
-                <ScalarProperty Name="Id_rezerwacji" ColumnName="Id_rezerwacji" />
-                <ScalarProperty Name="Id_klienta" ColumnName="Id_klienta" />
-                <ScalarProperty Name="Numer_stolika" ColumnName="Numer_stolika" />
-                <ScalarProperty Name="Rezerwacja_od" ColumnName="Rezerwacja_od" />
                 <ScalarProperty Name="Rezerwacja_do" ColumnName="Rezerwacja_do" />
+                <ScalarProperty Name="Rezerwacja_od" ColumnName="Rezerwacja_od" />
+                <ScalarProperty Name="Numer_stolika" ColumnName="Numer_stolika" />
+                <ScalarProperty Name="Id_klienta" ColumnName="Id_klienta" />
+                <ScalarProperty Name="Id_rezerwacji" ColumnName="Id_rezerwacji" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rezerwacje_Potrawy">
+            <EntityTypeMapping TypeName="RestauracjaModel.Rezerwacje_Potrawy">
+              <MappingFragment StoreEntitySet="Rezerwacje_Potrawy">
+                <ScalarProperty Name="id_potrawy" ColumnName="id_potrawy" />
+                <ScalarProperty Name="id_zamowienia" ColumnName="id_zamowienia" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Stoliki">
             <EntityTypeMapping TypeName="RestauracjaModel.Stoliki">
               <MappingFragment StoreEntitySet="Stoliki">
-                <ScalarProperty Name="Nr_stolika" ColumnName="Nr_stolika" />
                 <ScalarProperty Name="Ilosc_miejsc" ColumnName="Ilosc_miejsc" />
+                <ScalarProperty Name="Nr_stolika" ColumnName="Nr_stolika" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="Rezerwacje_Potrawy" TypeName="RestauracjaModel.Rezerwacje_Potrawy" StoreEntitySet="Rezerwacje_Potrawy">
-            <EndProperty Name="Potrawy">
-              <ScalarProperty Name="Id_potrawy" ColumnName="Id_potrawy" />
-            </EndProperty>
-            <EndProperty Name="Rezerwacje">
-              <ScalarProperty Name="Id_rezerwacji" ColumnName="Id_zamowienia" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

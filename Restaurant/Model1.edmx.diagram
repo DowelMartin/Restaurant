@@ -5,16 +5,18 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="f4c52a422a034377bedfb2b4925d1373" Name="Diagram1">
-        <EntityTypeShape EntityType="RestauracjaModel.Credentials" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestauracjaModel.Klienci" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestauracjaModel.Potrawy" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestauracjaModel.Rezerwacje" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestauracjaModel.Stoliki" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
-        <AssociationConnector Association="RestauracjaModel.FK_Klienci_Credentials" ManuallyRouted="false" />
-        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Klienci" ManuallyRouted="false" />
-        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Klienci1" ManuallyRouted="false" />
-        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Stoliki" ManuallyRouted="false" />
-        <AssociationConnector Association="RestauracjaModel.Rezerwacje_Potrawy" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="RestauracjaModel.Credentials" Width="1.5" PointX="0.75" PointY="1.5" />
+        <EntityTypeShape EntityType="RestauracjaModel.Klienci" Width="1.5" PointX="3" PointY="1.125" />
+        <EntityTypeShape EntityType="RestauracjaModel.Potrawy" Width="1.5" PointX="5.25" PointY="5.5" />
+        <EntityTypeShape EntityType="RestauracjaModel.Rezerwacje" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="RestauracjaModel.Rezerwacje_Potrawy" Width="1.5" PointX="7.5" PointY="1.375" />
+        <EntityTypeShape EntityType="RestauracjaModel.Stoliki" Width="1.5" PointX="3" PointY="5.5" />
+        <AssociationConnector Association="RestauracjaModel.FK_Klienci_Credentials" />
+        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Klienci" />
+        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Klienci1" />
+        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Potrawy_Potrawy" />
+        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Potrawy_Rezerwacje" />
+        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Stoliki" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

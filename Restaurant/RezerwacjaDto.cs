@@ -12,5 +12,6 @@ namespace Restaurant
         public string Nazwisko { get; set; }
         public int NumerStolika { get; set; }
         public DateTime RezerwacjaOd { get; set; }
+        public Potrawa Potrawa { get; set; }
     }
 }

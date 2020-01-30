@@ -33,8 +33,8 @@ namespace Restaurant
         {
             try
             {
-                db.Credentials.Add(new Credentials{ Email = email, Password = haslo });
-                db.Klienci.Add(new Klienci{ Imie = imie, Nazwisko = nazwisko, Email = email });
+                db.Credentials.Add(new Credentials { Email = email, Password = haslo });
+                db.Klienci.Add(new Klienci { Imie = imie, Nazwisko = nazwisko, Email = email });
                 db.SaveChanges();
 
             }
@@ -92,9 +92,9 @@ namespace Restaurant
         {
             //var result = new List<Stoliki>();
             var rezerwacje = (from s in db.Rezerwacje
-                              where s.Rezerwacja_do == day
+                              where s.Rezerwacja_od == day
                               select s.Stoliki).ToList();
-            return  GetStoliki().Except(rezerwacje).ToList();
+            return GetStoliki().Except(rezerwacje).ToList();
             //return result
         }
         public List<Klienci> GetKlienci()
@@ -132,16 +132,62 @@ namespace Restaurant
         {
             return db.Klienci.Where(x => x.Email == email).FirstOrDefault().Id_klienta;
         }
-
-        public List<RezerwacjaDto> GetRezerwacjaDtos()
+        public bool PlaceOrder(int user, DateTime when, int table, Potrawa dish)
         {
-            return db.Rezerwacje.Select(rezerwacja => new RezerwacjaDto()
+            try
             {
-                Id_rezerwacji = rezerwacja.Id_rezerwacji,
-                Nazwisko = rezerwacja.Klienci.Nazwisko,
-                NumerStolika = rezerwacja.Stoliki.Nr_stolika,
-                RezerwacjaOd = rezerwacja.Rezerwacja_od
-            }).ToList();
+                var potrawa = db.Potrawy.FirstOrDefault(x => x.Id_potrawy == dish.Id_potrawy);
+                var rezerwacje = new Rezerwacje()
+                {
+                    Id_klienta = user,
+                    Numer_stolika = table,
+                    Rezerwacja_od = when,
+                    Rezerwacja_do = when.AddHours(1),
+                };
+                db.Rezerwacje.Add(rezerwacje);
+                db.Rezerwacje_Potrawy.Add(new Rezerwacje_Potrawy()
+                {
+                    id_zamowienia = rezerwacje.Id_rezerwacji,
+                    id_potrawy = potrawa.Id_potrawy
+                });
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Błąd przy próbie zapisu do bazy");
+                return false;
+            }
+            return true;
+        }
+        public List<RezerwacjaDto> GetRezerwacjaDtos(int user)
+        {
+            var result = new List<RezerwacjaDto>();
+            foreach (var rez in db.Rezerwacje_Potrawy.Where(x=>x.Rezerwacje.Id_klienta==user))
+            {
+                var potrawa = new Potrawa()
+                {
+                    Cena = rez.Potrawy.Cena,
+                    Id_potrawy = rez.Potrawy.Id_potrawy,
+                    Nazwa = rez.Potrawy.Nazwa
+                };
+                result.Add(new RezerwacjaDto()
+                {
+                    Nazwisko = rez.Rezerwacje.Klienci.Nazwisko,
+                    Id_rezerwacji = rez.id_zamowienia,
+                    NumerStolika = rez.Rezerwacje.Numer_stolika,
+                    Potrawa = potrawa,
+                    RezerwacjaOd=rez.Rezerwacje.Rezerwacja_od
+                });
+            }
+            return result;
+        }
+        public void CancelReservation(int id)
+        {
+            var potr_rez = db.Rezerwacje_Potrawy.Where(x => x.id_zamowienia == id).FirstOrDefault();
+            var rez = db.Rezerwacje.Where(x => x.Id_rezerwacji == id).FirstOrDefault();
+            db.Rezerwacje.Remove(rez);
+            db.Rezerwacje_Potrawy.Remove(potr_rez);
+            db.SaveChanges();
         }
     }
 }
