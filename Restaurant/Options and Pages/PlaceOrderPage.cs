@@ -11,8 +11,16 @@ namespace Restaurant
         private DateTime reservation;
         private int tableNr;
         private int dishes;
+        private Repository repo;
+        private int userID;
+        private Potrawa zamowienie;
         public PlaceOrderOption() { }
-        public PlaceOrderOption(string name) => this.Name = name;
+        public PlaceOrderOption(string name, int user)
+        {
+            Name = name;
+            userID = user;
+            repo = new Repository();
+        }
 
         public override void Execute()
         {
@@ -20,11 +28,12 @@ namespace Restaurant
             string dateInfo;
             string tableInfo;
             string dishesInfo;
+            Repository repo = new Repository();
             do
             {
                 var date = DatePick();
                 reservation = HourPick(date);
-           
+
                 Console.Clear();
                 dateInfo = "Data rezerwacji: " + reservation.ToShortDateString() + " w godzinach: " + reservation.ToShortTimeString() + "-" + reservation.AddHours(1).ToShortTimeString();
                 Console.WriteLine(dateInfo);
@@ -41,14 +50,17 @@ namespace Restaurant
                 Console.WriteLine(tableInfo);
                 Console.WriteLine("Zatwierdzić wybrany stolik?");
                 choice = isGood();
+                if (choice == Choice.CANCEL) return;
             } while (choice == Choice.NO);
             do
             {
                 dishes = DishesPick();
-                dishesInfo = "Zamówiono "+dishes;
-                Console.WriteLine("Zatwierdzić wybraną potrawę?");
+                zamowienie = repo.GetPotrawy()[dishes - 1];
+                dishesInfo = "Zamówiono " + zamowienie.Nazwa + " " + zamowienie.Cena + "zł";
+                Console.WriteLine(dishesInfo+"\nZatwierdzić wybraną potrawę?");
                 choice = isGood();
-            } while(choice == Choice.NO);
+                if (choice == Choice.CANCEL) return;
+            } while (choice == Choice.NO);
 
             Console.Clear();
             Console.WriteLine("Zamówienie:");
@@ -65,7 +77,8 @@ namespace Restaurant
                 Console.Clear();
                 Console.WriteLine("Sukces! Zamówienie złożone!");
                 Thread.Sleep(2000);
-                
+                return;
+
             }
             else return;
         }
@@ -78,7 +91,7 @@ namespace Restaurant
         private Choice isGood()
         {
             Console.WriteLine("[T]-Tak/[N]-Nie/[A]-Anuluj");
-            var key = Pick.ForceProperKey(new List<ConsoleKey> { ConsoleKey.N , ConsoleKey.T , ConsoleKey.A});
+            var key = Pick.ForceProperKey(new List<ConsoleKey> { ConsoleKey.N, ConsoleKey.T, ConsoleKey.A });
             if (key == ConsoleKey.N)
                 return Choice.NO;
             else if (key == ConsoleKey.T)
@@ -96,10 +109,13 @@ namespace Restaurant
                 Console.Clear();
                 Console.WriteLine("Dzisiaj jest " + today.ToString("dddd"));
                 Console.WriteLine("Data rezerwacji:");
+                if (today.Hour >= 19)
+                    today = today.AddDays(1);
+
                 for (int i = 0; i < 8; i++)
                 {
                     date = today.AddDays(i);
-                    Console.WriteLine( i + " " + date.ToString("dddd").ToUpper() + " (" + date.ToShortDateString() + ")");
+                    Console.WriteLine(i + " " + date.ToString("dddd").ToUpper() + " (" + date.ToShortDateString() + ")");
                 }
                 Console.WriteLine("Podaj dzień rezerwacji (0-7):");
                 try
@@ -108,61 +124,28 @@ namespace Restaurant
                     date = today.AddDays(pick);
                 }
                 catch (Exception) { }
-                }
+            }
             return date;
-        }
-        private int TablePick()
-        {
-            int pick = 0;
-            do
-            { 
-                Console.Clear();
-                Console.WriteLine("Dostępne stoliki:");
-                // wypisanie numerów i ilości miejsc
-                //
-                Console.WriteLine("Proszę wybrać stolik():");
-                try
-                {
-                    pick = int.Parse(Console.ReadLine());
-
-                }
-                catch (Exception) { }
-            } while (pick <= 0);
-            return pick;
-        }
-        private int DishesPick()
-        {
-            int pick = 0;
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("Menu:");
-                // wypisanie jedzenia i cen
-                //
-                Console.WriteLine("Proszę wybrać danie():");
-                try
-                {
-                    pick = int.Parse(Console.ReadLine());
-                }
-                catch (Exception) { }
-            } while (pick <= 0);
-            return pick;
         }
         private DateTime HourPick(DateTime date)
         {
             int pick = 0;
             DateTime result = date;
-            while (!(pick >= 10 && pick <= 21))
+            int minReservationHour = 10;
+            int LasteReservHour = 21;
+            if (date.DayOfYear == DateTime.Now.DayOfYear)
+            {
+                minReservationHour = DateTime.Now.Hour + 2;
+            }
+            while (!(pick >= minReservationHour && pick <= LasteReservHour))
             {
                 Console.Clear();
                 Console.WriteLine("Godzina rezerwacji:");
-                //wypisanie dostępnych godzin
-                //
-                for (int godzina = 10; godzina < 22; godzina++)
+                for (int godzina = minReservationHour; godzina < LasteReservHour + 1; godzina++)
                 {
-                    Console.WriteLine(godzina + ":00-" + (godzina+1) + ":00");
+                    Console.WriteLine(godzina + ":00-" + (godzina + 1) + ":00");
                 }
-                Console.WriteLine("Podaj godzinę rezerwacji(10-21):");
+                Console.WriteLine("Podaj godzinę rezerwacji(" + minReservationHour + "-" + LasteReservHour + "):");
                 try
                 {
                     pick = int.Parse(Console.ReadLine());
@@ -172,6 +155,50 @@ namespace Restaurant
 
             }
             return result;
+        }
+        private int TablePick()
+        {
+            int pick = 0;
+            var stoliki = repo.GetStoliki(reservation);
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Dostępne stoliki:");
+                foreach (var s in stoliki)
+                {
+                    Console.WriteLine("Stół nr " + s.Nr_stolika + " osób:" + s.Ilosc_miejsc);
+                }
+                Console.WriteLine("Proszę wybrać stolik():");
+                try
+                {
+                    pick = int.Parse(Console.ReadLine());
+
+                }
+                catch (Exception) { }
+            } while (pick <= 0 || pick > stoliki.Count);
+            return pick;
+        }
+        private int DishesPick()
+        {
+            int pick = 0;
+            var dishes = repo.GetPotrawy();
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Menu:");
+                int i = 1;
+                foreach (var d in dishes)
+                {
+                    Console.WriteLine(i++ + ". " + d.Nazwa + " " + d.Cena + "zł");
+                }
+                Console.WriteLine("Proszę wybrać danie():");
+                try
+                {
+                    pick = int.Parse(Console.ReadLine());
+                }
+                catch (Exception) { }
+            } while (!(pick >0 &&pick <= dishes.Count));
+            return pick;
         }
     }
 }

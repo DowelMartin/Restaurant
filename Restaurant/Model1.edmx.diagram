@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f4c52a422a034377bedfb2b4925d1373" Name="Diagram1">
+        <EntityTypeShape EntityType="RestauracjaModel.Credentials" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestauracjaModel.Klienci" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestauracjaModel.Potrawy" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestauracjaModel.Rezerwacje" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestauracjaModel.Stoliki" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
+        <AssociationConnector Association="RestauracjaModel.FK_Klienci_Credentials" ManuallyRouted="false" />
+        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Klienci" ManuallyRouted="false" />
+        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Klienci1" ManuallyRouted="false" />
+        <AssociationConnector Association="RestauracjaModel.FK_Rezerwacje_Stoliki" ManuallyRouted="false" />
+        <AssociationConnector Association="RestauracjaModel.Rezerwacje_Potrawy" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

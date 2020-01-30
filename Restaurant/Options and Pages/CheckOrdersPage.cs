@@ -8,8 +8,12 @@ namespace Restaurant.Options
 {
     class CheckOrdersPage:Option
     {
-        public CheckOrdersPage() { }
-        public CheckOrdersPage(string name) => this.Name = name;
+        private int userID;
+        public CheckOrdersPage(string name,int user)
+        {
+            Name = name;
+            userID = user;
+        }
         public override void Execute()
         {
             int pick = 0;

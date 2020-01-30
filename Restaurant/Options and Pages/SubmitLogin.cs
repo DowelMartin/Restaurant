@@ -8,12 +8,12 @@ namespace Restaurant
 {
     class SubmitLoginOption : Option
     {
-        private string email;
-        private string password;
+        private FormField email;
+        private FormField password;
 
         public SubmitLoginOption() { }
         public SubmitLoginOption(string name) => this.Name = name;
-        public SubmitLoginOption(string name,string login,string pass)
+        public SubmitLoginOption(string name, FormField login, FormField pass)
         {
             Name = name;
             email = login;
@@ -22,9 +22,13 @@ namespace Restaurant
 
         public override void Execute()
         {
-            
-            Menu menu = new Menu();
-            //sprawdzenie danych 
+            Repository repo = new Repository();
+            if (repo.CheckCredentials(email.Value, password.Value))
+            {
+                Menu menu = new Menu(repo.GetUserID(email.Value));
+            }
+            else
+                Console.WriteLine("Logowanie nie powiodło się");
         }
     }
 }

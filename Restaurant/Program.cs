@@ -11,10 +11,11 @@ namespace Restaurant
         static void Main(string[] args)
         {
             OptionList menu = new OptionList("Menu");
-            menu.Add(new Login("Logowanie"));
+            menu.Add(new LoginPage("Logowanie"));
             menu.Add(new RejestrationOption("Rejestracja"));
             menu.Add(new Exit("Wyjście"));
             menu.Start();
+            
         }
     }
 }

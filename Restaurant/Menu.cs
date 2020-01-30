@@ -9,11 +9,11 @@ namespace Restaurant
 {
     class Menu
     {
-        public Menu()
+        public Menu(int userID)
         {
             OptionList menu = new OptionList("Menu");
-            menu.Add(new PlaceOrderOption("Złóż zamówienie"));
-            menu.Add(new CheckOrdersPage("Moje zamówienia"));
+            menu.Add(new PlaceOrderOption("Złóż zamówienie",userID));
+            menu.Add(new CheckOrdersPage("Moje zamówienia",userID));
             menu.Add(new Exit("Wyloguj"));
             menu.Start();
 

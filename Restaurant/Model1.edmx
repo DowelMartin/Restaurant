@@ -1,0 +1,385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RestauracjaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Credentials">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Klienci">
+          <Key>
+            <PropertyRef Name="Id_klienta" />
+          </Key>
+          <Property Name="Id_klienta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Imie" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Nazwisko" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Potrawy">
+          <Key>
+            <PropertyRef Name="Id_potrawy" />
+          </Key>
+          <Property Name="Id_potrawy" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazwa" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Cena" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rezerwacje">
+          <Key>
+            <PropertyRef Name="Id_rezerwacji" />
+          </Key>
+          <Property Name="Id_rezerwacji" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_klienta" Type="int" Nullable="false" />
+          <Property Name="Numer_stolika" Type="int" Nullable="false" />
+          <Property Name="Rezerwacja_od" Type="datetime" Nullable="false" />
+          <Property Name="Rezerwacja_do" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Restauracja.dbo.Rezerwacje_Potrawy' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Rezerwacje_Potrawy">
+          <Key>
+            <PropertyRef Name="Id_zamowienia" />
+            <PropertyRef Name="Id_potrawy" />
+          </Key>
+          <Property Name="Id_zamowienia" Type="int" Nullable="false" />
+          <Property Name="Id_potrawy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stoliki">
+          <Key>
+            <PropertyRef Name="Nr_stolika" />
+          </Key>
+          <Property Name="Nr_stolika" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ilosc_miejsc" Type="int" />
+        </EntityType>
+        <Association Name="FK_Klienci_Credentials">
+          <End Role="Credentials" Type="Self.Credentials" Multiplicity="1" />
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Credentials">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="Klienci">
+              <PropertyRef Name="Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Klienci">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="Id_klienta" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Id_klienta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Klienci1">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="Id_klienta" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Id_klienta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Potrawy_Potrawy">
+          <End Role="Potrawy" Type="Self.Potrawy" Multiplicity="1" />
+          <End Role="Rezerwacje_Potrawy" Type="Self.Rezerwacje_Potrawy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Potrawy">
+              <PropertyRef Name="Id_potrawy" />
+            </Principal>
+            <Dependent Role="Rezerwacje_Potrawy">
+              <PropertyRef Name="Id_potrawy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Potrawy_Rezerwacje">
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="1" />
+          <End Role="Rezerwacje_Potrawy" Type="Self.Rezerwacje_Potrawy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rezerwacje">
+              <PropertyRef Name="Id_rezerwacji" />
+            </Principal>
+            <Dependent Role="Rezerwacje_Potrawy">
+              <PropertyRef Name="Id_zamowienia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Stoliki">
+          <End Role="Stoliki" Type="Self.Stoliki" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stoliki">
+              <PropertyRef Name="Nr_stolika" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Numer_stolika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RestauracjaModelStoreContainer">
+          <EntitySet Name="Credentials" EntityType="Self.Credentials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Klienci" EntityType="Self.Klienci" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Potrawy" EntityType="Self.Potrawy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rezerwacje" EntityType="Self.Rezerwacje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stoliki" EntityType="Self.Stoliki" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rezerwacje_Potrawy" EntityType="Self.Rezerwacje_Potrawy" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Rezerwacje_Potrawy].[Id_zamowienia] AS [Id_zamowienia], 
+    [Rezerwacje_Potrawy].[Id_potrawy] AS [Id_potrawy]
+    FROM [dbo].[Rezerwacje_Potrawy] AS [Rezerwacje_Potrawy]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Klienci_Credentials" Association="Self.FK_Klienci_Credentials">
+            <End Role="Credentials" EntitySet="Credentials" />
+            <End Role="Klienci" EntitySet="Klienci" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Klienci" Association="Self.FK_Rezerwacje_Klienci">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Klienci1" Association="Self.FK_Rezerwacje_Klienci1">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Potrawy_Potrawy" Association="Self.FK_Rezerwacje_Potrawy_Potrawy">
+            <End Role="Potrawy" EntitySet="Potrawy" />
+            <End Role="Rezerwacje_Potrawy" EntitySet="Rezerwacje_Potrawy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Potrawy_Rezerwacje" Association="Self.FK_Rezerwacje_Potrawy_Rezerwacje">
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+            <End Role="Rezerwacje_Potrawy" EntitySet="Rezerwacje_Potrawy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Stoliki" Association="Self.FK_Rezerwacje_Stoliki">
+            <End Role="Stoliki" EntitySet="Stoliki" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RestauracjaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Credentials">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Klienci" Relationship="Self.FK_Klienci_Credentials" FromRole="Credentials" ToRole="Klienci" />
+        </EntityType>
+        <EntityType Name="Klienci">
+          <Key>
+            <PropertyRef Name="Id_klienta" />
+          </Key>
+          <Property Name="Id_klienta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Imie" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nazwisko" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Credentials" Relationship="Self.FK_Klienci_Credentials" FromRole="Klienci" ToRole="Credentials" />
+          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK_Rezerwacje_Klienci" FromRole="Klienci" ToRole="Rezerwacje" />
+          <NavigationProperty Name="Rezerwacje1" Relationship="Self.FK_Rezerwacje_Klienci1" FromRole="Klienci" ToRole="Rezerwacje" />
+        </EntityType>
+        <EntityType Name="Potrawy">
+          <Key>
+            <PropertyRef Name="Id_potrawy" />
+          </Key>
+          <Property Name="Id_potrawy" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Cena" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Rezerwacje" Relationship="Self.Rezerwacje_Potrawy" FromRole="Potrawy" ToRole="Rezerwacje" />
+        </EntityType>
+        <EntityType Name="Rezerwacje">
+          <Key>
+            <PropertyRef Name="Id_rezerwacji" />
+          </Key>
+          <Property Name="Id_rezerwacji" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_klienta" Type="Int32" Nullable="false" />
+          <Property Name="Numer_stolika" Type="Int32" Nullable="false" />
+          <Property Name="Rezerwacja_od" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Rezerwacja_do" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Klienci" Relationship="Self.FK_Rezerwacje_Klienci" FromRole="Rezerwacje" ToRole="Klienci" />
+          <NavigationProperty Name="Klienci1" Relationship="Self.FK_Rezerwacje_Klienci1" FromRole="Rezerwacje" ToRole="Klienci" />
+          <NavigationProperty Name="Stoliki" Relationship="Self.FK_Rezerwacje_Stoliki" FromRole="Rezerwacje" ToRole="Stoliki" />
+          <NavigationProperty Name="Potrawy" Relationship="Self.Rezerwacje_Potrawy" FromRole="Rezerwacje" ToRole="Potrawy" />
+        </EntityType>
+        <EntityType Name="Stoliki">
+          <Key>
+            <PropertyRef Name="Nr_stolika" />
+          </Key>
+          <Property Name="Nr_stolika" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ilosc_miejsc" Type="Int32" />
+          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK_Rezerwacje_Stoliki" FromRole="Stoliki" ToRole="Rezerwacje" />
+        </EntityType>
+        <Association Name="FK_Klienci_Credentials">
+          <End Role="Credentials" Type="Self.Credentials" Multiplicity="1" />
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Credentials">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="Klienci">
+              <PropertyRef Name="Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Klienci">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="Id_klienta" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Id_klienta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Klienci1">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="Id_klienta" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Id_klienta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Stoliki">
+          <End Role="Stoliki" Type="Self.Stoliki" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stoliki">
+              <PropertyRef Name="Nr_stolika" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Numer_stolika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Rezerwacje_Potrawy">
+          <End Role="Potrawy" Type="Self.Potrawy" Multiplicity="*" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="RestauracjaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Credentials" EntityType="Self.Credentials" />
+          <EntitySet Name="Klienci" EntityType="Self.Klienci" />
+          <EntitySet Name="Potrawy" EntityType="Self.Potrawy" />
+          <EntitySet Name="Rezerwacje" EntityType="Self.Rezerwacje" />
+          <EntitySet Name="Stoliki" EntityType="Self.Stoliki" />
+          <AssociationSet Name="FK_Klienci_Credentials" Association="Self.FK_Klienci_Credentials">
+            <End Role="Credentials" EntitySet="Credentials" />
+            <End Role="Klienci" EntitySet="Klienci" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Klienci" Association="Self.FK_Rezerwacje_Klienci">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Klienci1" Association="Self.FK_Rezerwacje_Klienci1">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Stoliki" Association="Self.FK_Rezerwacje_Stoliki">
+            <End Role="Stoliki" EntitySet="Stoliki" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="Rezerwacje_Potrawy" Association="Self.Rezerwacje_Potrawy">
+            <End Role="Potrawy" EntitySet="Potrawy" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RestauracjaModelStoreContainer" CdmEntityContainer="RestauracjaEntities">
+          <EntitySetMapping Name="Credentials">
+            <EntityTypeMapping TypeName="RestauracjaModel.Credentials">
+              <MappingFragment StoreEntitySet="Credentials">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Klienci">
+            <EntityTypeMapping TypeName="RestauracjaModel.Klienci">
+              <MappingFragment StoreEntitySet="Klienci">
+                <ScalarProperty Name="Id_klienta" ColumnName="Id_klienta" />
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Potrawy">
+            <EntityTypeMapping TypeName="RestauracjaModel.Potrawy">
+              <MappingFragment StoreEntitySet="Potrawy">
+                <ScalarProperty Name="Id_potrawy" ColumnName="Id_potrawy" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="Cena" ColumnName="Cena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rezerwacje">
+            <EntityTypeMapping TypeName="RestauracjaModel.Rezerwacje">
+              <MappingFragment StoreEntitySet="Rezerwacje">
+                <ScalarProperty Name="Id_rezerwacji" ColumnName="Id_rezerwacji" />
+                <ScalarProperty Name="Id_klienta" ColumnName="Id_klienta" />
+                <ScalarProperty Name="Numer_stolika" ColumnName="Numer_stolika" />
+                <ScalarProperty Name="Rezerwacja_od" ColumnName="Rezerwacja_od" />
+                <ScalarProperty Name="Rezerwacja_do" ColumnName="Rezerwacja_do" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stoliki">
+            <EntityTypeMapping TypeName="RestauracjaModel.Stoliki">
+              <MappingFragment StoreEntitySet="Stoliki">
+                <ScalarProperty Name="Nr_stolika" ColumnName="Nr_stolika" />
+                <ScalarProperty Name="Ilosc_miejsc" ColumnName="Ilosc_miejsc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Rezerwacje_Potrawy" TypeName="RestauracjaModel.Rezerwacje_Potrawy" StoreEntitySet="Rezerwacje_Potrawy">
+            <EndProperty Name="Potrawy">
+              <ScalarProperty Name="Id_potrawy" ColumnName="Id_potrawy" />
+            </EndProperty>
+            <EndProperty Name="Rezerwacje">
+              <ScalarProperty Name="Id_rezerwacji" ColumnName="Id_zamowienia" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

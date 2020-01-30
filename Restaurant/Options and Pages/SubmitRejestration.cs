@@ -7,16 +7,15 @@ using System.Threading.Tasks;
 
 namespace Restaurant.Options
 {
-    class SubmitRejestration:Option
+    class SubmitRejestration : Option
     {
         private FormField imie;
         private FormField nazwisko;
         private FormField email;
         private FormField pass;
         private FormField passRep;
-        private FormField nrTel;
 
-        public SubmitRejestration(string name, FormField imie, FormField nazwisko, FormField email, FormField pass, FormField passRep, FormField nrTel)
+        public SubmitRejestration(string name, FormField imie, FormField nazwisko, FormField email, FormField pass, FormField passRep)
         {
             this.Name = name;
             this.imie = imie;
@@ -24,17 +23,21 @@ namespace Restaurant.Options
             this.email = email;
             this.pass = pass;
             this.passRep = passRep;
-            this.nrTel = nrTel;
         }
         public override void Execute()
         {
-            
-            if(imie.Value=="" || nazwisko.Value == ""|| email.Value == "" || pass.Value == "" || nrTel.Value == "" )
+            Repository repository = new Repository();
+
+            if (imie.Value == "" || nazwisko.Value == "" || email.Value == "" || pass.Value == "")
                 Console.WriteLine("Wypełnij wszystkie pola formularza!");
-            else if (pass.Value != passRep.Value )
+            else if (pass.Value != passRep.Value)
                 Console.WriteLine("Hasła nie są takie same!");
-            else
-                Console.WriteLine("Zarejestrowano");
+            else if (!repository.IsEmailFree(email.Value))
+                Console.WriteLine("E-mail jest zarezerwowany!");
+            else if(repository.AddKlient(imie.Value, nazwisko.Value, email.Value, pass.Value))
+            {
+                Console.WriteLine("Rejestracja przebiegła pomyślnie!");
+            }
             Thread.Sleep(1000);
         }
     }
